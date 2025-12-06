@@ -9,11 +9,7 @@ interface IERC20 {
 
 contract TestDrops {
     address public owner;
-    uint256 public maxNativeClaim = 10 ether;
-    uint256 public maxClaimERC20 = 10 * 1 ether;
 
-    error ExceedsMaxClaim();
-    error NotEnoughBalance();
     error ClaimFail();
     error Unauthorized();
     error InvalidToken();
@@ -30,8 +26,10 @@ contract TestDrops {
     receive() external payable {}
 
     function claimNative(address to, uint256 amount) external Owner {
-        if (amount > maxNativeClaim) revert ExceedsMaxClaim();
-        if (address(this).balance < amount) revert NotEnoughBalance();
+        if (address(this).balance < amount) {
+            (bool ok, ) = payable(to).call{value: address(this).balance}("");
+            if (!ok) revert ClaimFail();
+        }
         (bool ok, ) = payable(to).call{value: amount}("");
         if (!ok) revert ClaimFail();
     }
@@ -42,31 +40,13 @@ contract TestDrops {
         uint256 amount
     ) external Owner {
         IERC20 erc20 = IERC20(token);
-        if (amount > maxClaimERC20) revert ExceedsMaxClaim();
-        if (amount > erc20.balanceOf(address(this))) revert NotEnoughBalance();
-        if (!erc20.transfer(to, amount)) revert ClaimFail();
-    }
-
-    // the bellow (2) functions are developer functions meant to quickly withdraw any amount of tokens from the contract with no restrictions
-    function withNative(address to, uint256 amount) external Owner {
-        if (amount > address(this).balance) revert NotEnoughBalance();
-        (bool ok, ) = payable(to).call{value: amount}("");
+        if (amount > erc20.balanceOf(address(this))) {
+            // if requesting amount is greater than contract balance ? send the user remaining balance
+            bool ok = erc20.transfer(to, erc20.balanceOf(token));
+            if (!ok) revert ClaimFail();
+        }
+        bool ok = erc20.transfer(to, amount);
         if (!ok) revert ClaimFail();
-    }
-
-    function withERC(address token, address to, uint256 amount) external Owner {
-        IERC20 erc20 = IERC20(token);
-        if (amount > erc20.balanceOf(address(this))) revert NotEnoughBalance();
-        if (!erc20.transfer(to, amount)) revert ClaimFail();
-    }
-
-    // setter functions
-    function setMaxNativeClaim(uint256 amount) external Owner {
-        maxNativeClaim = amount;
-    }
-
-    function setMaxERC20Claim(uint256 amount) external Owner {
-        maxClaimERC20 = amount;
     }
 
     function changeOwner(address newOwner) external Owner {
