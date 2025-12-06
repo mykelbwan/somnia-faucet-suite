@@ -4,7 +4,9 @@
   "description": "",
   "main": "bot.ts",
   "scripts": {
-    "dev": "ts-node src/bot.ts"
+    "dev": "ts-node src/bot.ts",
+    "build": "tsc",
+    "start": "node dist/bot.js"
   },
   "keywords": [],
   "author": "",

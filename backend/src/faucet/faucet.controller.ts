@@ -12,11 +12,11 @@ export async function claimSomnia(req: Request, res: Response) {
 
     if (!wallet) return res.status(400).json({ error: "wallet expected" });
     if (!username) return res.status(400).json({ error: "username expected" });
-
     if (!isAddress(wallet))
       return res.status(400).json({ error: "Invalid wallet address" });
 
     const check = await checkAndRegisterClaim(wallet, username);
+
     if (!check.allowed) {
       return res.status(429).json({ error: check.error });
     }
@@ -37,11 +37,11 @@ export async function claimERC20(req: Request, res: Response) {
     if (!wallet) return res.status(400).json({ error: "wallet expected" });
     if (!token) return res.status(400).json({ error: "token expected" });
     if (!username) return res.status(400).json({ error: "username expected" });
-
     if (!isAddress(wallet) || !isAddress(token))
       return res.status(400).json({ error: "Invalid input" });
 
     const check = await checkAndRegisterClaim(wallet, username);
+
     if (!check.allowed) {
       return res.status(429).json({ error: check.error });
     }

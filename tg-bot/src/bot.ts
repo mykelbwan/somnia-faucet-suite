@@ -1,6 +1,7 @@
 import "dotenv/config";
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
+import { log } from "console";
 
 const { USDC, MAIN_ENTRY, TELEGRAM_BOT_TOKEN } = process.env;
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN!, { polling: true });
@@ -26,7 +27,9 @@ bot.onText(/!(STT|USDC)\s+(0x[a-fA-F0-9]{40})/, async (msg, match) => {
       });
 
       tHash = res.data.txHash;
+      amount = res.data.amount;
     }
+
     if (command === "USDC") {
       const res = await axios.get(claimERC, {
         params: { wallet, token: USDC, username },
@@ -36,8 +39,8 @@ bot.onText(/!(STT|USDC)\s+(0x[a-fA-F0-9]{40})/, async (msg, match) => {
       amount = res.data.amount;
     }
 
-    const messageText = `Received <b>${amount} ${command}</b>. 
-    View the <a href="https://shannon-explorer.somnia.network/tx/${tHash}">transaction</a>.
+    const messageText = `Received <b>${amount} ${command}</b>.
+<a href="https://shannon-explorer.somnia.network/tx/${tHash}">View the transaction</a>.
     `;
     bot.sendMessage(chatId, messageText, { parse_mode: "HTML" });
   } catch (err: any) {
