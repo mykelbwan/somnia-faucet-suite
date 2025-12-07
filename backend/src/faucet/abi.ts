@@ -1,5 +1,4 @@
 export const abi = [
-  { type: "receive", stateMutability: "payable" },
   {
     type: "function",
     name: "changeOwner",
@@ -28,65 +27,4 @@ export const abi = [
     outputs: [],
     stateMutability: "nonpayable",
   },
-  {
-    type: "function",
-    name: "maxClaimERC20",
-    inputs: [],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "maxNativeClaim",
-    inputs: [],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "owner",
-    inputs: [],
-    outputs: [{ name: "", type: "address", internalType: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "setMaxERC20Claim",
-    inputs: [{ name: "amount", type: "uint256", internalType: "uint256" }],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "setMaxNativeClaim",
-    inputs: [{ name: "amount", type: "uint256", internalType: "uint256" }],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "withERC",
-    inputs: [
-      { name: "token", type: "address", internalType: "address" },
-      { name: "to", type: "address", internalType: "address" },
-      { name: "amount", type: "uint256", internalType: "uint256" },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "withNative",
-    inputs: [
-      { name: "to", type: "address", internalType: "address" },
-      { name: "amount", type: "uint256", internalType: "uint256" },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  { type: "error", name: "ClaimFail", inputs: [] },
-  { type: "error", name: "ExceedsMaxClaim", inputs: [] },
-  { type: "error", name: "InvalidToken", inputs: [] },
-  { type: "error", name: "NotEnoughBalance", inputs: [] },
-  { type: "error", name: "Unauthorized", inputs: [] },
 ];
