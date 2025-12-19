@@ -33,7 +33,7 @@ The project is a monorepo with the following components:
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/mykelbwan/somnia-faucet-bots.git
+    git clone https://github.com/mykelbwan/somnia-faucet-suite.git
     cd somnia-faucet
     ```
 
